@@ -6,11 +6,10 @@ import { RoleEnum } from "../utils/enum";
 import { v4 as uuidv4 } from 'uuid';
 
 
-const userModel = new UserModel();
-
 export const register = async (req: Request, res: Response) => {
   const { userName, lastName, password, email, contact } = req.body;
   const id = uuidv4(); // Generate UUID if not provided
+  const userModel = new UserModel({userName, lastName, email, password, id, role: RoleEnum.USER, contact});
 
   try {
     // Check if the user already exists
@@ -20,11 +19,7 @@ export const register = async (req: Request, res: Response) => {
     }
 
     // Register the user
-    await userModel.register({
-      userName, lastName, password, email, contact,
-      id,
-      role: RoleEnum.USER
-    });
+    await userModel.register();
 
     return res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
@@ -35,6 +30,7 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  const userModel = new UserModel();
 
   try {
     // Validate login credentials

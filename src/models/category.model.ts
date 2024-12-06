@@ -1,6 +1,6 @@
 import pool from "../config/data-source";
 
-interface Category {
+export interface Category {
   id: string;
   name: string;
   description?: string;
@@ -9,13 +9,23 @@ interface Category {
 }
 
 export class CategoryModel {
+  private category?: Category
+
+  constructor(category?: Category) {
+    this.category = category
+  }
+
   // Create a new category
-  async create(category: Category): Promise<void> {
+  async create(): Promise<void> {
+    if (!this.category) {
+      throw new Error("Category data is required to create a new category.");
+    }
+
     const query = `
       INSERT INTO category (id, name, description)
       VALUES (?, ?, ?)
     `;
-    const values = [category.id, category.name, category.description || null];
+    const values = [this.category.id, this.category.name, this.category.description || null];
     await pool.execute(query, values);
   }
 
@@ -40,13 +50,17 @@ export class CategoryModel {
   }
 
   // Update a category
-  async update(id: number, category: Partial<Category>): Promise<number> {
+  async update(): Promise<number> {
+    if (!this.category) {
+      throw new Error("Category data is required to create a new category.");
+    }
+    
     const query = `
       UPDATE category
       SET name = ?, description = ?, updatedAt = CURRENT_TIMESTAMP
       WHERE id = ?
     `;
-    const values = [category.name, category.description || null, id];
+    const values = [this.category.name, this.category.description || null, this.category.id];
     const [result]: any = await pool.execute(query, values);
     return result.affectedRows;
   }

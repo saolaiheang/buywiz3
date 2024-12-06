@@ -14,15 +14,24 @@ export interface User {
 }
 
 export class UserModel {
-  // Register a new user
-  async register(user: User): Promise<void> {
-    const hashPassword = encryptPassword(user.password);
+  private user?: User
 
+  constructor(user?: User) {
+    this.user = user
+  }
+
+
+  // Register a new user
+  async register(): Promise<void> {
+    if (!this.user) {
+      throw new Error("User data is required to create a new user.");
+    }
+    const hashPassword = encryptPassword(this.user.password);
     const query = `
       INSERT INTO users (id, userName, lastName, password, email, contact)
       VALUES (?, ?, ?, ?, ?, ?)
     `;
-    const values = [user.id, user.userName, user.lastName, hashPassword, user.email, user.contact || null];
+    const values = [this.user.id, this.user.userName, this.user.lastName, hashPassword, this.user.email, this.user.contact || null];
 
     await pool.execute(query, values);
   }
