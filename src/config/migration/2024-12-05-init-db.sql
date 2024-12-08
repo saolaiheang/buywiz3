@@ -1,4 +1,4 @@
-CREATE TABLE buywizsample.users (
+CREATE TABLE users (
     id CHAR(36) PRIMARY KEY, -- Store UUID as a 36-character string
     userName VARCHAR(50) NOT NULL,
     lastName VARCHAR(50) NOT NULL,
@@ -9,11 +9,11 @@ CREATE TABLE buywizsample.users (
     updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-ALTER TABLE buywizsample.users ADD COLUMN role VARCHAR(20) DEFAULT 'user';
+ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT 'user';
 
 
 
-CREATE TABLE buywizsample.category (
+CREATE TABLE category (
      id CHAR(36) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT,

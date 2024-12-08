@@ -17,7 +17,7 @@ app.use(cors(corsOptions));
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
-// Middleware setup
+
 app.use(express.json());
 
 // Routes setup
